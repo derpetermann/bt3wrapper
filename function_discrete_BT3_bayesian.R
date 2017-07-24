@@ -11,7 +11,7 @@
 #              - ER assumes the rate of gaining (qNY) or losing a feature (qNY) is the same
 #              - ARD assumes the rates to differ
 # it:         number of MCMC iterations
-# bi:         number of itarations discarded as burn in
+# bi:         number of iterations discarded as burn in
 # sa:         numbers of iterations to skip between taking samples
 # pa:         prior distribution of the parameters (for ARD assumed the same for qNY and qYN)
 # rm:         logical, indicates whether to clean up ad remove all temporary files
