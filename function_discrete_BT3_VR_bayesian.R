@@ -108,22 +108,22 @@ Discrete_BT3_VR_bayesian <- function (tree, data, model, it = 1e+05, bi = 50000,
   data_filepath <- file.path(bayes_traits_folder, "/BT.current.data.txt")
   write.table(data, data_filepath, quote = F, col.names = F, row.names = F)
   
-  # Execute BT 
+   # Execute BT 
   # For Windows
   if (Sys.info()['sysname'] == "Windows") {
     print ("Windows OS detected")  
-    shell(cmd = paste(.BayesTraitsPath, 
-                      tree_filepath, data_filepath, "<", input_filepath), 
-          flag="/c", intern=FALSE, wait=TRUE,
-          translate=TRUE, mustWork=FALSE)}
+    invisible(shell(cmd = paste(.BayesTraitsPath, 
+                                tree_filepath, data_filepath, "<", input_filepath), 
+                                flag="/c", intern=TRUE, wait=TRUE,
+                                translate=TRUE, mustWork=FALSE))}
   
   # For Mac
   else if (Sys.info()['sysname'] == "Darwin") {
     print("Mac OS detected")
-    system(paste(.BayesTraitsPath, 
+    invisible(system(paste(.BayesTraitsPath, 
                  paste0(bayes_traits_folder, "/BT.current.tree.nex"), 
                  paste0(bayes_traits_folder, "/BT.current.data.txt"),
-                 paste0("< ", bayes_traits_folder, "/inputfile.txt")))}
+                 paste0("< ", bayes_traits_folder, "/inputfile.txt"))))}
   
   else {stop("Your OS is not supported")} 
   
