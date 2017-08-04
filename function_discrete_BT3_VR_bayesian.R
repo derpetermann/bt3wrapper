@@ -173,7 +173,7 @@ Discrete_BT3_VR_bayesian <- function (tree, data, model, it = 1e+05, bi = 50000,
       lang_names <- read.table(var_rates_filepath, sep='\t', fill=T, colClasses = "character",
                                skip = 1, nrows = num_lang)
       #add colnames
-      colnames(lang_names)<-c("node_id", "lang_name")
+      colnames(lang_names)<-c("tip_id", "lang_name")
       
       #read the number of nodes
       ancest_n<-as.numeric(read.table(var_rates_filepath, sep='\t', fill=T, colClasses = "character",
@@ -183,16 +183,21 @@ Discrete_BT3_VR_bayesian <- function (tree, data, model, it = 1e+05, bi = 50000,
       ancest_info<-read.table(var_rates_filepath, sep='\t', fill=T, colClasses = "character",
                               skip = (num_lang+2), nrows = ancest_n)
       
-      #remove all tips
+      #all tips
+      tip_info<-subset(ancest_info, V3 <= 1)
+      tip_info<-tip_info[,c(1,4)]
+      colnames(tip_info)<-c("node_id", "tip_id")
+      lang_names<-merge(lang_names, tip_info, all.x = TRUE, by = "tip_id")
+      #remove all tips from the nodes
       ancest_info<-subset(ancest_info, V3 > 1)
       ancest_info<-ancest_info[,c(1,3:(3+num_lang))]
-      
       #add colnames
       colnames(ancest_info)[1:2]<-c("node_id", "num_descendants")
       colnames(ancest_info)[3:ncol(ancest_info)]<-paste("descendant_","",1:(ncol(ancest_info)-2),
                                                         sep="")
+      #what to give back
+      node_info<-list(tip_names = lang_names, node_structure = ancest_info)
       
-      node_info <- list(tip_names = lang_names, node_structure = ancest_info)
       
       nc <- max(count.fields(var_rates_filepath, sep = '\t'))
       var_rates_log <- read.table(var_rates_filepath, sep='\t', 
